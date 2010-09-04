@@ -3,7 +3,12 @@ require 'sinatra'
 require 'sqlite3'
 require 'pp'
 
-site = "http://build.i.page2page.net:8080/"
+helpers do
+  def job_link(build_num)
+    "http://build.i.page2page.net:8080/job/BooxImage/#{build_num}"
+  end
+end
+
 get '/' do
   db = SQLite3::Database.new( "#{ENV['HOME']}/builds.db" )
   rows = db.execute("select distinct branch from builds;")
