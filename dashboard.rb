@@ -45,3 +45,14 @@ get '/' do
   pp @branches
   haml :index
 end
+
+get "/history/:branch/:kernel/:profile" do
+  @branch, @kernel, @profile = params[:branch], params[:kernel], params[:profile]
+  db = SQLite3::Database.new( "#{ENV['HOME']}/builds.db" )
+  rows = db.execute("select build_num, build_id from builds " +
+                    "where branch='#{@branch}' and kernel='#{@kernel}' " +
+                    "and profile='#{@profile}' order by build_num desc")
+  @builds = []
+  rows.each {|row| @builds << {:num => row[0], :id => row[1]}}
+  haml :history
+end
