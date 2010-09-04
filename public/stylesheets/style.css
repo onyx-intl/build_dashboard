@@ -1,0 +1,13 @@
+table {
+   border-width: 0;
+   border-style: none;
+   border-spacing: 1px;
+}
+
+thead {
+   background-color: #ddddff
+}
+
+tr > td:first-child {
+   color: #000099
+}
