@@ -3,6 +3,9 @@ require 'sinatra'
 require 'sqlite3'
 require 'pp'
 
+restart_txt = File.expand_path(File.dirname(__FILE__)) + "/tmp/restart.txt"
+File.unlink restart_txt if File.exists? restart_txt
+
 helpers do
   def job_link(build_num)
     "http://build.i.page2page.net:8080/job/BooxImage/#{build_num}"
@@ -37,12 +40,10 @@ get '/' do
                           "desc limit 1")
         build_num, build_id = rows[0]
         branch['builds'][kernel][profile] = {:id => build_id, :num => build_num}
-#        html += "<td><a href=\"#{site}job/BooxImage/#{build_num}/\">#{build_id}</a></td>"
       end
     end
     @branches[bname] = branch
   end
-  pp @branches
   haml :index
 end
 
