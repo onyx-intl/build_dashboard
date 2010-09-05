@@ -13,6 +13,7 @@
           - @branches[branch]['profiles'].each do |profile|
             - build = @branches[branch]['builds'][kernel][profile]
             %td
-              %a{:href => job_link(build[:num])}= build[:id]
-              %br/
-              %a{:href => "/history/#{branch}/#{kernel}/#{profile}"} >> History
+              - if build
+                %a{:href => job_link(build[:num])}= build[:id]
+                %br/
+                %a{:href => "/history/#{branch}/#{kernel}/#{profile}"} >> History
