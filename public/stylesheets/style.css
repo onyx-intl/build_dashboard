@@ -1,13 +1,20 @@
 table {
-   border-width: 0;
-   border-style: none;
-   border-spacing: 1px;
+   border-width: 2;
+   border-style: solid;
+   border-color: #0000aa;
+   border-spacing: 0px;
+}
+
+td,th {
+   border-color: #0000aa;
+   border-width: 1px;
+   border-style: solid;
 }
 
 thead {
-   background-color: #ddddff
+   background-color: #ddddff;
 }
 
 tr > td:first-child {
-   color: #000099
+   color: #000099;
 }
