@@ -74,3 +74,23 @@ get "/artifacts/:build_id" do
   @artifacts = Dir.new(dir).select {|f| File.file? "#{dir}/#{f}"}
   haml :artifacts
 end
+
+def artifact_path(build_id, artifact)
+  "#{artifacts_dir build_id}/#{artifact}"
+end
+
+get "/upload/:build_id/:artifact" do
+  build_id = params[:build_id]
+  artifact = params[:artifact]
+  # TODO: check if the artifact has already been uploaded.
+  db = SQLite3::Database.new( "#{ENV['HOME']}/builds.db" )
+  db.execute("create table if not exists upload_jobs " +
+             "(artifact, path, status, url)")
+  db.execute("insert into upload_jobs " +
+             "(artifact, path, status) " +
+             "values ( :artifact, :path, :status )",
+             "artifact" => artifact,
+             "path" => artifact_path(build_id, artifact),
+             "status" => "pending")
+  redirect "/artifacts/#{build_id}"
+end

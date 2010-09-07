@@ -5,6 +5,7 @@
   - @artifacts.each do |artifact|
     %li
       = artifact
+      %br/
       [
-      %a{:href => "/upload/#{@build_id}"} Make public
+      %a{:href => "/upload/#{@build_id}/#{artifact}"} Make public
       ]
