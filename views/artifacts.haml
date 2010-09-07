@@ -7,5 +7,10 @@
       = artifact
       %br/
       [
-      %a{:href => "/upload/#{@build_id}/#{artifact}"} Make public
+      - if @status[artifact] == 'pending' || @status[artifact] == 'uploading'
+        %div= "Status: #{@status[artifact]}"
+      - elsif @status[artifact] == 'uploaded'
+        %a{:href => @urls[artifact]} Public URL
+      - else
+        %a{:href => "/upload/#{@build_id}/#{artifact}"} Make public
       ]

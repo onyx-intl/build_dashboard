@@ -72,6 +72,15 @@ get "/artifacts/:build_id" do
   @build_id = params[:build_id]
   dir = artifacts_dir(@build_id)
   @artifacts = Dir.new(dir).select {|f| File.file? "#{dir}/#{f}"}
+  @status = {}
+  @urls = {}
+  @artifacts.each do |artifact|
+    rows = db.execute("select status, url from upload_jobs where " +
+                      "artifact='#{artifact}'")
+    if rows && rows.length > 0
+      @status[artifact], @urls[artifact] = rows[0]
+    end
+  end
   haml :artifacts
 end
 
