@@ -74,6 +74,7 @@ get "/artifacts/:build_id" do
   @artifacts = Dir.new(dir).select {|f| File.file? "#{dir}/#{f}"}
   @status = {}
   @urls = {}
+  db = SQLite3::Database.new( "#{ENV['HOME']}/builds.db" )
   @artifacts.each do |artifact|
     rows = db.execute("select status, url from upload_jobs where " +
                       "artifact='#{artifact}'")
