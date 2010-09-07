@@ -36,7 +36,6 @@ class Uploader
 
   def read_credentials
     credentials = IO.read(File.join(ENV['HOME'], '.cloudfiles'))
-    puts credentials
     instance_eval credentials
   end
 end
