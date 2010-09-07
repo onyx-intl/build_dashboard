@@ -70,6 +70,7 @@ end
 
 get "/artifacts/:build_id" do
   @build_id = params[:build_id]
-  @artifacts = Dir.new(artifacts_dir(@build_id)).select {|f| File.file? f}
+  dir = artifacts_dir(@build_id)
+  @artifacts = Dir.new(dir).select {|f| File.file? "#{dir}/#{f}"}
   haml :artifacts
 end
