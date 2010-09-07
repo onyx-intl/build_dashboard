@@ -1,0 +1,10 @@
+%h1 Build artifacts
+%h2= @build_id
+%a{:href => "/"} Return to dashboard.
+%ul
+  - @artifacts.each do |artifact|
+    %li
+      = artifact
+      [
+        %a{:href => "/upload/#{build[:id]}"} Make public
+      ]

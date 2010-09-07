@@ -1,10 +1,16 @@
 require 'rubygems'
+
+require 'haml'
 require 'sinatra'
 require 'sqlite3'
 require 'pp'
 
-restart_txt = File.expand_path(File.dirname(__FILE__)) + "/tmp/restart.txt"
+APP_DIR = File.expand_path(File.dirname(__FILE__))
+
+restart_txt = "#{APP_DIR}/tmp/restart.txt"
 File.unlink restart_txt if File.exists? restart_txt
+
+set :views, "#{APP_DIR}/views"
 
 helpers do
   def job_link(build_num)
@@ -56,4 +62,14 @@ get "/history/:branch/:kernel/:profile" do
   @builds = []
   rows.each {|row| @builds << {:num => row[0], :id => row[1]}}
   haml :history
+end
+
+def artifacts_dir(build_id)
+  "#{ENV['HOME']}/jobs/BooxImage/builds/#{build_id}/archive/artifacts"
+end
+
+get "/artifacts/:build_id" do
+  @build_id = params[:build_id]
+  @artifacts = Dir.new(artifacts_dir(@build_id)).select {|f| File.file? f}
+  haml :artifacts
 end
