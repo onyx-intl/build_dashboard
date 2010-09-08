@@ -1,0 +1,3 @@
+[submodule "onyx-ruby"]
+	path = onyx-ruby
+	url = git@github.com:onyx-intl/onyx-ruby.git
