@@ -8,6 +8,7 @@ set :branch, "master"
 set :deploy_via, :remote_cache
 set :deploy_to, "/var/www/dashboard"
 set :use_sudo, false
+set :git_enable_submodules, 1
 
 role :web, "build.i.page2page.net"
 role :app, "build.i.page2page.net"
