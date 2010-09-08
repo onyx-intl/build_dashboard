@@ -49,9 +49,14 @@ Uploader.connect do |uploader|
   jobs.each do |job|
     db.execute("update upload_jobs set status='uploading' " +
                "where artifact='#{job[:artifact]}'")
-    url = uploader.upload_to_bucket("Software Releases", job[:artifact],
-                                    job[:path])
-    db.execute("update upload_jobs set status='uploaded', url='#{url}'" +
-               " where artifact='#{job[:artifact]}'")
+    begin
+      url = uploader.upload_to_bucket("Software Releases", job[:artifact],
+                                      job[:path])
+      db.execute("update upload_jobs set status='uploaded', url='#{url}'" +
+                 " where artifact='#{job[:artifact]}'")
+    rescue
+      db.execute("update upload_jobs set status='pending', url='#{url}'" +
+                 " where artifact='#{job[:artifact]}' and status='uploading'")
+    end
   end
 end
