@@ -1,0 +1,11 @@
+%form{:method => 'POST', :action => '/login'}
+  %table
+    %tr
+      %td Username:
+      %td
+        %input{:name => 'user', :type => 'text'}
+    %tr
+      %td Password:
+      %td
+        %input{:name => 'password', :type => 'password'}
+  %input{:type => 'submit', :value => 'Submit'}

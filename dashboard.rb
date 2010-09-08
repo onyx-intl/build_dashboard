@@ -2,15 +2,24 @@ require 'rubygems'
 
 require 'haml'
 require 'sinatra'
+require 'sinatra/session'
 require 'sqlite3'
 require 'pp'
 
 APP_DIR = File.expand_path(File.dirname(__FILE__))
+$:.unshift("#{APP_DIR}/onyx-ruby/lib")
+
+require 'onyx/pop_auth'
+require 'onyx/config_loader'
 
 restart_txt = "#{APP_DIR}/tmp/restart.txt"
 File.unlink restart_txt if File.exists? restart_txt
 
+config = Onyx::ConfigLoader.load_file("#{ENV['HOME']}/.onyx/dashboard")
+
 set :views, "#{APP_DIR}/views"
+set :session_fail, '/login'
+set :session_secret, 'ANHxzA7rvxKH9z4A'
 
 helpers do
   def job_link(build_num)
@@ -18,7 +27,28 @@ helpers do
   end
 end
 
+get '/login' do
+  if session?
+    redirect '/'
+  else
+    haml :login
+  end
+end
+
+post '/login' do
+  if params[:user] and is_valid_pop3_account(:host => config.get(:pop3_host),
+                                             :user => params[:user],
+                                             :password => params[:password])
+    session_start!
+    session[:user] = params[:user]
+    redirect '/'
+  else
+    redirect '/login'
+  end
+end
+
 get '/' do
+  session!
   db = SQLite3::Database.new( "#{ENV['HOME']}/builds.db" )
   rows = db.execute("select distinct branch from builds;")
   bnames = []
