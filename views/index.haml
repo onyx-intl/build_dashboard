@@ -15,6 +15,9 @@
             %td
               - if build[:id] && build[:num]
                 = build[:id]
+                [
+                %a{:href => "/artifacts/#{build[:id]}"} Artifacts
+                ]
                 %br/
                 [
                 %a{:href => job_link(build[:num])} Hudson
